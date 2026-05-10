@@ -1,12 +1,60 @@
-import WeatherCard from "@/components/weather/WeatherCard";
-import { getCurrentWeather } from "@/services/weather-api";
+"use client";
 
-export default async function Home() {
-  const weather = await getCurrentWeather("Pune");
+import { useEffect, useState } from "react";
+
+import SearchBar from "@/components/weather/SearchBar";
+import WeatherCard from "@/components/weather/WeatherCard";
+
+import { WeatherData } from "@/types/weather";
+
+export default function Home() {
+  const [weather, setWeather] =
+    useState<WeatherData | null>(null);
+
+  const [city, setCity] =
+    useState("Pune");
+
+  const [loading, setLoading] =
+    useState(false);
+
+  useEffect(() => {
+    fetchWeather(city);
+  }, []);
+
+  async function fetchWeather(
+    cityName: string
+  ) {
+    try {
+      setLoading(true);
+
+      const response = await fetch(
+        `/api/weather?city=${cityName}`
+      );
+
+      const data = await response.json();
+
+      setWeather(data);
+      setCity(cityName);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   return (
-    <main className="min-h-screen bg-black flex items-center justify-center p-4">
-      <WeatherCard weather={weather} />
+    <main className="min-h-screen bg-black flex flex-col items-center justify-center gap-6 p-4">
+      <SearchBar
+        onSearch={fetchWeather}
+      />
+
+      {loading && (
+        <p>Loading...</p>
+      )}
+
+      {weather && (
+        <WeatherCard weather={weather} />
+      )}
     </main>
   );
 }
