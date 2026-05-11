@@ -24,21 +24,16 @@ export default function SearchBar({
         type="text"
         placeholder="Search city..."
         value={city}
-        onChange={(e) =>
-          setCity(e.target.value)
-        }
+        onChange={(e) => setCity(e.target.value)}
         onKeyDown={(e) => {
           if (e.key === "Enter") {
             handleSearch();
           }
         }}
-        className="flex-1 bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 outline-none"
+        className="flex-1 bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl px-4 py-3 outline-none"
       />
 
-      <button
-        onClick={handleSearch}
-        className="bg-blue-600 px-5 rounded-xl"
-      >
+      <button onClick={handleSearch} className="bg-blue-600 hover:bg-blue-500 transition-all duration-300 px-5 rounded-2xl">
         Search
       </button>
     </div>

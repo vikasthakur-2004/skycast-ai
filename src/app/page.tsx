@@ -43,7 +43,7 @@ export default function Home() {
   }
 
   return (
-    <main className="min-h-screen bg-black flex flex-col items-center justify-center gap-6 p-4">
+    <main className="min-h-screen bg-gradient-to-br from-slate-950 via-black to-slate-900 flex flex-col items-center justify-center gap-6 p-4">
       <SearchBar
         onSearch={fetchWeather}
       />
@@ -52,7 +52,7 @@ export default function Home() {
         <p>Loading...</p>
       )}
 
-      {weather && (
+      {weather?.current && (
         <WeatherCard weather={weather} />
       )}
     </main>

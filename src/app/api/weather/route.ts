@@ -6,18 +6,47 @@ const API_KEY =
 export async function GET(
   request: Request
 ) {
-  const { searchParams } =
-    new URL(request.url);
+  try {
+    const { searchParams } =
+      new URL(request.url);
 
-  const city =
-    searchParams.get("city");
+    const city =
+      searchParams.get("city");
 
-  const response = await fetch(
-    `https://api.weatherapi.com/v1/current.json?key=${API_KEY}&q=${city}`
-  );
+    const response = await fetch(
+      `https://api.weatherapi.com/v1/current.json?key=${API_KEY}&q=${city}`,
+      {
+        cache: "no-store",
+      }
+    );
 
-  const data =
-    await response.json();
+    if (!response.ok) {
+      return NextResponse.json(
+        {
+          error:
+            "Failed to fetch weather",
+        },
+        {
+          status: response.status,
+        }
+      );
+    }
 
-  return NextResponse.json(data);
+    const data =
+      await response.json();
+
+    return NextResponse.json(data);
+  } catch (error) {
+    console.error(error);
+
+    return NextResponse.json(
+      {
+        error:
+          "Weather service unavailable",
+      },
+      {
+        status: 500,
+      }
+    );
+  }
 }
